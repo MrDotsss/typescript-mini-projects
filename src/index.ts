@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
-import { BaseMode, ModeManager } from "./core/mode_manager.js";
+import { ModeID } from "./core/base_mode.js";
+import { ModeManager } from "./core/mode_manager.js";
+import * as Modes from "./modes/init.js";
 
 const mode_manager: ModeManager = new ModeManager();
 
-const mode_list: Array<BaseMode> = [];
+mode_manager.register(ModeID.MainMenu, new Modes.MainMenu(mode_manager));
+mode_manager.register(
+  ModeID.SaveManager,
+  new Modes.SaveManagerMode(mode_manager),
+);
 
-mode_list.forEach((mode) => {
-  mode_manager.addMode(mode);
-});
-
-await mode_manager.showMenu();
+await mode_manager.start();
