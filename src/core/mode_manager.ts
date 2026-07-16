@@ -1,10 +1,10 @@
 import { saveManager, SaveState } from "./save_manager.js";
 import { text, spinner } from "@clack/prompts";
 import chalk from "chalk";
-import { sleep } from "./tools.js";
+import { handleInput, sleep } from "./tools.js";
 import { BaseMode, ModeID } from "./base_mode.js";
 
-class ModeManager {
+export default class ModeManager {
   public playerName: string = "";
   public modeList: Map<ModeID, BaseMode> = new Map();
   private currentMode: BaseMode | null = null;
@@ -59,15 +59,18 @@ class ModeManager {
   }
 
   private async askName(): Promise<void> {
-    const playerName = await text({
-      message: "What is your name?",
-      placeholder: "Player",
-      validate(value: string | undefined) {
-        if (value && value.length === 0) return `Value is required!`;
-      },
-    });
+    const playerName = await handleInput<string>(() =>
+      text({
+        message: "What is your name?",
+        initialValue: "Player",
+        placeholder: "Player",
+        validate(value: string | undefined) {
+          if (value && value.length === 0) return `Value is required!`;
+        },
+      }),
+    );
 
-    this.playerName = playerName.toString();
+    this.playerName = playerName;
 
     const toSave: SaveState = {
       mode_name: ModeManager.USER_SAVE_PATH,
@@ -78,5 +81,3 @@ class ModeManager {
     saveManager.saveData(ModeManager.USER_SAVE_PATH, toSave);
   }
 }
-
-export { ModeManager, BaseMode };

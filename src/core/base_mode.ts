@@ -1,10 +1,14 @@
-import { ModeManager } from "./mode_manager.js";
+import ModeManager from "./mode_manager.js";
 import { spinner, SpinnerResult } from "@clack/prompts";
 import { saveManager, SaveState } from "./save_manager.js";
+import figlet from "figlet";
+import chalk from "chalk";
+import { pastel } from "gradient-string";
 
 enum ModeID {
   MainMenu = "Main Menu",
   SaveManager = "Save Manager",
+  MadlibsGame = "Madlibs Game",
   Exit = "Exit",
 }
 
@@ -30,6 +34,12 @@ abstract class BaseMode {
     };
 
     saveManager.saveData(this.savePath, save);
+  }
+
+  async displayTitle(title: string, font: string = "Doom"): Promise<void> {
+    const toPrint = await figlet.text(title, { font: font });
+
+    console.log(pastel.multiline(toPrint));
   }
 }
 
