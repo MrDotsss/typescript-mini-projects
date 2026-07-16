@@ -1,0 +1,104 @@
+{
+  "prompts": [
+    {
+      "id": "animal",
+      "message": "Enter the name of an animal",
+      "hint": "noun"
+    },
+    {
+      "id": "person",
+      "message": "Enter a person's name",
+      "hint": "noun"
+    },
+    {
+      "id": "place",
+      "message": "Enter a place",
+      "hint": "noun"
+    },
+    {
+      "id": "object",
+      "message": "Enter an object",
+      "hint": "noun"
+    },
+    {
+      "id": "food",
+      "message": "Enter a funny food",
+      "hint": "noun"
+    },
+    {
+      "id": "verb1",
+      "message": "Enter an action",
+      "hint": "verb"
+    },
+    {
+      "id": "verb2",
+      "message": "Enter another action",
+      "hint": "verb"
+    },
+    {
+      "id": "adjective1",
+      "message": "Enter a describing word",
+      "hint": "adjective"
+    },
+    {
+      "id": "adjective2",
+      "message": "Enter another describing word",
+      "hint": "adjective"
+    },
+    {
+      "id": "adverb",
+      "message": "Enter a word describing how something happens",
+      "hint": "adverb"
+    }
+  ],
+  "stories": [
+    {
+      "title": "The Worst Vacation Ever",
+      "storyTemplate": [
+        "Yesterday, {person} decided to visit {place} with a pet {animal}.",
+        "Everything was going well until the {animal} suddenly {verb1} onto a giant {object}.",
+        "Everyone watched {adverb} as {person} tried to {verb2} while holding a {food}.",
+        "It was the most {adjective1} and {adjective2} vacation ever."
+      ]
+    },
+    {
+      "title": "Cooking Disaster",
+      "storyTemplate": [
+        "Chef {person} proudly announced today's special:",
+        "A grilled {animal} stuffed with {food}.",
+        "Unfortunately, someone accidentally {verb1} the {object}, causing everyone to {verb2}.",
+        "The customers stared {adverb} before declaring it the most {adjective1} and {adjective2} meal in history."
+      ]
+    },
+    {
+      "title": "School Presentation",
+      "storyTemplate": [
+        "Today, {person} gave a presentation about the amazing {animal}.",
+        "According to the report, the creature lives inside {place} and enjoys eating {food} every morning.",
+        "To prove it, {person} began to {verb1} with a giant {object}, then {verb2} around the classroom {adverb}.",
+        "The teacher called it both {adjective1} and {adjective2}."
+      ]
+    },
+    {
+      "title": "Breaking News",
+      "storyTemplate": [
+        "Breaking News!",
+        "A {animal} has taken control of {place}.",
+        "Witnesses say it first {verb1} a mysterious {object}, then demanded unlimited {food}.",
+        "Mayor {person} responded by trying to {verb2}, but everything happened too {adverb}.",
+        "Experts describe the situation as incredibly {adjective1} and surprisingly {adjective2}."
+      ]
+    },
+    {
+      "title": "The Weird Job Interview",
+      "storyTemplate": [
+        "During an interview at {place}, {person} was asked one simple question:",
+        "\"Can you {verb1} a {animal} while carrying a {object}?\"",
+        "After answering yes, they immediately had to {verb2} while balancing a plate of {food}.",
+        "The interviewer watched {adverb} before saying,",
+        "\"That was the most {adjective1} and {adjective2} performance we've ever seen.\"",
+        "Needless to say, {person} got the job."
+      ]
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 import { ModeID } from "../core/base_mode.js";
 import { select, confirm } from "@clack/prompts";
-import { BaseMode, ModeManager } from "../core/mode_manager.js";
+import ModeManager from "../core/mode_manager.js";
+import { BaseMode } from "../core/base_mode.js";
 import { saveManager, SaveState } from "../core/save_manager.js";
-import { sleep } from "../core/tools.js";
+import { handleInput, sleep } from "../core/tools.js";
 import { format } from "date-fns";
 
 export default class SaveManagerMode extends BaseMode {
@@ -51,14 +52,16 @@ export default class SaveManagerMode extends BaseMode {
       label: `${this.modes[index].modeID} | ${format(info.timestamp, "MMMM dd, yyyy")}`,
     }));
 
-    const toDelete: string | symbol = await select({
-      message: "Select Save to delete",
-      options: [
-        ...saveOptions,
-        { value: this.clearAllOption, label: "Delete All Saves" },
-        { value: this.exitOption, label: "Return to main menu" },
-      ],
-    });
+    const toDelete: string = await handleInput<string>(() =>
+      select({
+        message: "Select Save to delete",
+        options: [
+          ...saveOptions,
+          { value: this.clearAllOption, label: "Delete All Saves" },
+          { value: this.exitOption, label: "Return to main menu" },
+        ],
+      }),
+    );
 
     if (toDelete === this.exitOption) {
       this.modeManager.transitionTo(ModeID.MainMenu);
@@ -66,9 +69,11 @@ export default class SaveManagerMode extends BaseMode {
     }
 
     if (toDelete === this.clearAllOption) {
-      const shouldClear = await confirm({
-        message: "Confirm clear all saves?",
-      });
+      const shouldClear = await handleInput<boolean>(() =>
+        confirm({
+          message: "Confirm clear all saves?",
+        }),
+      );
 
       if (shouldClear) {
         this.loader.start("Clearing saves...");
@@ -77,9 +82,11 @@ export default class SaveManagerMode extends BaseMode {
         this.loader.stop("All saves cleared");
       }
     } else {
-      const shouldDelete = await confirm({
-        message: `Confirm Delete? ${toDelete as string}`,
-      });
+      const shouldDelete = await handleInput<boolean>(() =>
+        confirm({
+          message: `Confirm Delete? ${toDelete as string}`,
+        }),
+      );
 
       if (shouldDelete) {
         this.loader.start("Deleting data...");
