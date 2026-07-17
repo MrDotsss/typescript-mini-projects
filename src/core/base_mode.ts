@@ -2,14 +2,15 @@ import ModeManager from "./mode_manager.js";
 import { spinner, SpinnerResult } from "@clack/prompts";
 import { saveManager, SaveState } from "./save_manager.js";
 import figlet from "figlet";
-import chalk from "chalk";
 import { pastel } from "gradient-string";
+import Authentication from "../modes/authentication.js";
 
 enum ModeID {
+  Authentication = "Authentication",
   MainMenu = "Main Menu",
   SaveManager = "Save Manager",
   MadlibsGame = "Madlibs Game",
-  Exit = "Exit",
+  LOGOUT = "Logout",
 }
 
 abstract class BaseMode {
@@ -21,10 +22,6 @@ abstract class BaseMode {
 
   abstract onEnter(): Promise<void>;
   abstract onExit(): Promise<void>;
-
-  get playerName(): string {
-    return this.modeManager.playerName;
-  }
 
   protected toSave(data: any) {
     const save: SaveState = {
