@@ -32,11 +32,23 @@ export default class ModeManager {
     await this.currentMode?.onExit();
 
     if (mode === ModeID.LOGOUT) {
-      this.authentication.logout();
+      await this.authentication.logout();
       mode = ModeID.Authentication;
+    } else if (mode === ModeID.EXIT) {
+      process.exit(0);
     }
 
-    this.currentMode = this.modeList.get(mode) ?? null;
+    let modeToTransition = this.modeList.get(mode) ?? null;
+
+    if (modeToTransition && modeToTransition.requiresAuth) {
+      const isAuthenticated = await this.authentication.ensureAuthenticated();
+
+      if (!isAuthenticated) {
+        modeToTransition = this.authentication;
+      }
+    }
+
+    this.currentMode = modeToTransition;
     await this.currentMode?.onEnter();
   }
 }

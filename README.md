@@ -87,6 +87,20 @@ By centralizing persistence, every mode can focus on its own gameplay or functio
 - Clears all application save data.
 - Provides a shared persistence API for every mode.
 
+### 🔑 JWT Authentication
+
+The [JWT Authentication](src/core/jwt-service.ts) module provides persistent login functionality by issuing and storing refresh tokens. Instead of requiring users to log in every time the application starts, the CLI can restore authenticated sessions from a previously saved token.
+
+### Features
+
+- Generates JWT refresh tokens after successful authentication.
+- Configures token expiration for automatic session expiry.
+- Verifies token authenticity and validity.
+- Stores refresh tokens securely in a local session file.
+- Automatically loads existing sessions on application startup.
+- Clears saved sessions during logout.
+- Separates authentication data from session management.
+
 ## MODES 🔥
 
 ## 🔐 Mode: Authentication

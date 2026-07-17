@@ -11,12 +11,16 @@ enum ModeID {
   SaveManager = "Save Manager",
   MadlibsGame = "Madlibs Game",
   LOGOUT = "Logout",
+  EXIT = "Exit",
 }
 
 abstract class BaseMode {
   protected loader: SpinnerResult = spinner();
   constructor(protected modeManager: ModeManager) {}
 
+  get requiresAuth(): boolean {
+    return true;
+  }
   abstract get modeID(): ModeID;
   abstract get savePath(): string;
 

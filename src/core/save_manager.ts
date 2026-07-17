@@ -9,8 +9,9 @@ import {
   rm,
 } from "node:fs/promises";
 import path from "node:path";
+import { writeLine } from "./tools.js";
 
-const save_path: string = "saves";
+const save_path: string = path.join(process.cwd(), "saves");
 
 interface SaveState {
   mode_name: string;
@@ -49,8 +50,7 @@ class SaveManager {
 
       return JSON.parse(load) as SaveState;
     } catch (error) {
-      console.log(chalk.bgRed(`SAVE FOR ${mode_name} not found!`));
-      console.error(error);
+      await writeLine(chalk.bgRed(`Could not load save for ${mode_name}`));
       return null;
     }
   }
@@ -63,8 +63,7 @@ class SaveManager {
 
       return true;
     } catch (error) {
-      console.log(chalk.bgRed(`CAN'T SAVE: ${mode_name}`));
-      console.error(error);
+      await writeLine(chalk.bgRed(`Could not save data for ${mode_name}`));
       return false;
     }
   }
@@ -76,11 +75,6 @@ class SaveManager {
       await unlink(savePath);
       return true;
     } catch (error: any) {
-      if (error.code === "ENOENT") {
-        console.error(`File does not exist: ${mode_name}`);
-      } else {
-        console.error(`Error deleting file: ${error.message}`);
-      }
       return false;
     }
   }
@@ -93,7 +87,6 @@ class SaveManager {
 
       return true;
     } catch (error) {
-      console.log("Error Clearing data");
       return false;
     }
   }

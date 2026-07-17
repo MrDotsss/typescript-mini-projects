@@ -16,4 +16,9 @@ async function handleInput<T>(
   return result as T;
 }
 
-export { sleep, handleInput };
+async function writeLine(message: string, delay: number = 2000): Promise<void> {
+  console.log(message);
+  await sleep(delay);
+}
+
+export { sleep, handleInput, writeLine };
