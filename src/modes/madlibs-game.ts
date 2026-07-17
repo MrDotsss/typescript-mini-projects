@@ -5,7 +5,7 @@ import { confirm, text } from "@clack/prompts";
 import chalk from "chalk";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { handleInput, sleep } from "../core/tools.js";
+import { handleInput, sleep, writeLine } from "../core/tools.js";
 import { start } from "node:repl";
 
 interface WordResult {
@@ -103,7 +103,7 @@ export default class MadlibsGame extends BaseMode {
           break; // proceed to next prompt
         }
 
-        console.log(
+        await writeLine(
           `${chalk.underline.red(answer)} is not a valid word or ${chalk.underline.bold(prompt.hint)}`,
         );
       }

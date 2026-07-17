@@ -83,7 +83,7 @@ export default class SaveManagerMode extends BaseMode {
       if (shouldClear) {
         this.loader.start("Clearing saves...");
         await saveManager.clearAllData();
-        this.modeManager.authentication.logout();
+        await this.modeManager.authentication.logout();
         await sleep(1000);
         this.loader.stop("All saves cleared");
       }

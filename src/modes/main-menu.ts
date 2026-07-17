@@ -25,7 +25,11 @@ export default class MainMenu extends BaseMode {
 
     console.clear();
 
-    const modes = [...this.modeManager.modeList.keys(), ModeID.LOGOUT];
+    const modes = [
+      ...this.modeManager.modeList.keys(),
+      ModeID.LOGOUT,
+      ModeID.EXIT,
+    ];
 
     await this.displayTitle("TS Mini Projects");
     console.log(
@@ -44,7 +48,7 @@ export default class MainMenu extends BaseMode {
         })),
     });
 
-    if (mode !== ModeID.LOGOUT) {
+    if (mode !== ModeID.LOGOUT && mode !== ModeID.EXIT) {
       this.loader.start("Launching...");
       await sleep(1000);
       this.loader.stop();
