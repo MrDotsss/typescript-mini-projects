@@ -1,83 +1,42 @@
-import { saveManager, SaveState } from "./save_manager.js";
-import { text, spinner } from "@clack/prompts";
-import chalk from "chalk";
-import { handleInput, sleep } from "./tools.js";
+import Authentication from "../modes/authentication.js";
+import { MainMenu, SaveManagerMode } from "../modes/modes.js";
 import { BaseMode, ModeID } from "./base_mode.js";
 
 export default class ModeManager {
-  public playerName: string = "";
   public modeList: Map<ModeID, BaseMode> = new Map();
   private currentMode: BaseMode | null = null;
 
-  public static USER_SAVE_PATH: string = "user-save";
+  public authentication: Authentication;
+  private saveManager: SaveManagerMode;
+  private mainMenu: MainMenu;
+
+  constructor() {
+    this.authentication = new Authentication(this);
+    this.saveManager = new SaveManagerMode(this);
+    this.mainMenu = new MainMenu(this);
+
+    this.register(ModeID.Authentication, this.authentication);
+    this.register(ModeID.SaveManager, this.saveManager);
+    this.register(ModeID.MainMenu, this.mainMenu);
+  }
 
   public async register(id: ModeID, mode: BaseMode) {
     this.modeList.set(id, mode);
   }
 
   public async start(): Promise<void> {
-    const loading = spinner();
-
-    loading.start("Checking saves...");
-
-    const saveExists: boolean = await saveManager.isSaveExists(
-      ModeManager.USER_SAVE_PATH,
-    );
-    await sleep(500);
-
-    if (!saveExists) {
-      loading.stop("New User, no saves yet");
-
-      await this.askName();
-      console.log(`Hello! ${chalk.bold.underline(this.playerName)}`);
-    } else {
-      loading.stop("Save found!");
-      loading.start("Loading save...");
-
-      const load = await saveManager.loadData(ModeManager.USER_SAVE_PATH);
-
-      await sleep(500);
-      if (load) {
-        this.playerName = load.data as string;
-      }
-
-      loading.stop(`Welcome back! ${chalk.bold.underline(this.playerName)}`);
-    }
-
-    await this.transitionTo(ModeID.MainMenu);
+    await this.transitionTo(ModeID.Authentication);
   }
 
   public async transitionTo(mode: ModeID) {
     await this.currentMode?.onExit();
 
-    if (mode === ModeID.Exit) {
-      process.exit(0);
+    if (mode === ModeID.LOGOUT) {
+      this.authentication.logout();
+      mode = ModeID.Authentication;
     }
 
     this.currentMode = this.modeList.get(mode) ?? null;
     await this.currentMode?.onEnter();
-  }
-
-  private async askName(): Promise<void> {
-    const playerName = await handleInput<string>(() =>
-      text({
-        message: "What is your name?",
-        initialValue: "Player",
-        placeholder: "Player",
-        validate(value: string | undefined) {
-          if (value && value.length === 0) return `Value is required!`;
-        },
-      }),
-    );
-
-    this.playerName = playerName;
-
-    const toSave: SaveState = {
-      mode_name: ModeManager.USER_SAVE_PATH,
-      timestamp: Date.now(),
-      data: this.playerName,
-    };
-
-    saveManager.saveData(ModeManager.USER_SAVE_PATH, toSave);
   }
 }

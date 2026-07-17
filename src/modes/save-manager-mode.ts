@@ -5,6 +5,7 @@ import { BaseMode } from "../core/base_mode.js";
 import { saveManager, SaveState } from "../core/save_manager.js";
 import { handleInput, sleep } from "../core/tools.js";
 import { format } from "date-fns";
+import Authentication from "./authentication.js";
 
 export default class SaveManagerMode extends BaseMode {
   private saves: SaveState[] = [];
@@ -26,16 +27,20 @@ export default class SaveManagerMode extends BaseMode {
 
   modes: BaseMode[] = [...this.modeManager.modeList.values()].filter(
     (mode: BaseMode) =>
+      mode.modeID !== ModeID.Authentication &&
       mode.modeID !== ModeID.MainMenu &&
       mode.modeID !== ModeID.SaveManager &&
-      mode.modeID !== ModeID.Exit,
+      mode.modeID !== ModeID.LOGOUT,
   );
 
   async fetchSaves(): Promise<void> {
     for (const mode of this.modes) {
-      const save = await saveManager.loadData(mode.savePath);
-      if (save) {
-        this.saves.push(save);
+      const isExist = await saveManager.isSaveExists(mode.savePath);
+      if (isExist) {
+        const save = await saveManager.loadData(mode.savePath);
+        if (save) {
+          this.saves.push(save);
+        }
       }
     }
   }
@@ -78,6 +83,7 @@ export default class SaveManagerMode extends BaseMode {
       if (shouldClear) {
         this.loader.start("Clearing saves...");
         await saveManager.clearAllData();
+        this.modeManager.authentication.logout();
         await sleep(1000);
         this.loader.stop("All saves cleared");
       }

@@ -11,6 +11,8 @@ This project is a TypeScript remake of my original [Python Mini Projects CLI](ht
 | Package           | Description                                                                |
 | ----------------- | -------------------------------------------------------------------------- |
 | `@clack/prompts`  | Creates interactive and user-friendly command-line prompts.                |
+| `axios`           | Performs HTTP requests to external APIs.                                   |
+| `bcrypt`          | Securely hashes and verifies user passwords.                               |
 | `chalk`           | Adds colors and styling to terminal output.                                |
 | `date-fns`        | Provides modern utilities for parsing, formatting, and manipulating dates. |
 | `figlet`          | Generates ASCII art text for terminal banners and headings.                |
@@ -18,11 +20,12 @@ This project is a TypeScript remake of my original [Python Mini Projects CLI](ht
 
 ### Development Dependencies
 
-| Package       | Description                                                                        |
-| ------------- | ---------------------------------------------------------------------------------- |
-| `@types/node` | TypeScript type definitions for Node.js APIs.                                      |
-| `tsx`         | Runs TypeScript files directly without manual compilation and supports watch mode. |
-| `typescript`  | The TypeScript compiler and language tooling.                                      |
+| Package         | Description                                                                        |
+| --------------- | ---------------------------------------------------------------------------------- |
+| `@types/bcrypt` | TypeScript type definitions for bcrypt.                                            |
+| `@types/node`   | TypeScript type definitions for Node.js APIs.                                      |
+| `tsx`           | Runs TypeScript files directly without manual compilation and supports watch mode. |
+| `typescript`    | The TypeScript compiler and language tooling.                                      |
 
 ## 📂 Directories
 
@@ -85,6 +88,22 @@ By centralizing persistence, every mode can focus on its own gameplay or functio
 - Provides a shared persistence API for every mode.
 
 ## MODES 🔥
+
+## 🔐 Mode: Authentication
+
+[The Authentication mode](src/modes//authentication.ts) is the application's entry point, requiring users to register or log in before accessing the mini projects. User credentials are securely stored using password hashing with **bcrypt** and persisted as JSON.
+
+### Features
+
+- Register a new user account with a unique username.
+- Securely hash passwords before saving them.
+- Log in using existing credentials.
+- Verify passwords using bcrypt comparison.
+- Prevent duplicate usernames during registration.
+- Enforce a minimum password length.
+- Persist user accounts across application sessions.
+- Maintain the authenticated user's session for the current runtime.
+- Support logging out and returning to the authentication screen.
 
 ## 🎮 Mode: Madlibs Game
 
